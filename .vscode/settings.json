@@ -8,8 +8,8 @@
     // Competitive Programming Helper
     "cph.general.defaultLanguage": "cpp",
     "cph.general.defaultLanguageTemplateFileLocation": "/Users/zhangzimo/Workspace/Competitive-Programming-Solutions/.cph/template.cpp",
-    "cph.general.hideStderrorWhenCompiledOK": false,
     "cph.general.ignoreSTDERROR": true,
+    "cph.general.retainWebviewContext": true,
     "cph.general.timeOut": 10000,
     "cph.language.cpp.Args": "-O2 -Wall -Wextra -Wconversion -std=c++20",
     "cph.language.cpp.Command": "g++-14",
