@@ -1,6 +1,6 @@
 {
     "recommendations": [
-        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cpptools",
         "divyanshuagrawal.competitive-programming-helper"
     ]
 }
