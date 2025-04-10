@@ -71,7 +71,10 @@ struct Polygon : std::vector<Point> {
         return std::vector<Point>::operator[](__n % size());
     }
 };
-using ConvexHull = Polygon;
+struct ConvexHull : Polygon {
+    using Polygon::Polygon;
+    int cur = 0;
+};
 ConvexHull getLowerHull(std::vector<Point> p) {
     std::sort(p.begin(), p.end());
     ConvexHull lo;
@@ -79,7 +82,7 @@ ConvexHull getLowerHull(std::vector<Point> p) {
         while (lo.size() > 1 && toLeft(p, Line(lo.end()[-2], lo.end()[-1])) <= 0) {
             lo.pop_back();
         }
-        lo.push_back(p);
+        lo.emplace_back(p);
     }
     return lo;
 }
@@ -90,7 +93,7 @@ ConvexHull getUpperHull(std::vector<Point> p) {
         while (up.size() > 1 && toLeft(p, Line(up.end()[-2], up.end()[-1])) >= 0) {
             up.pop_back();
         }
-        up.push_back(p);
+        up.emplace_back(p);
     }
     std::ranges::reverse(up);
     return up;
@@ -103,8 +106,8 @@ ConvexHull toConvexHull(std::vector<Point> p) {
 }
 ConvexHull operator+(ConvexHull lhs, ConvexHull rhs) {
     ConvexHull res{lhs[0] + rhs[0]};
-    lhs.push_back(lhs[0]);
-    rhs.push_back(rhs[0]);
+    lhs.emplace_back(lhs[0]);
+    rhs.emplace_back(rhs[0]);
     for (int i = 0; i + 1 < lhs.size(); i++) {
         lhs[i] = lhs[i + 1] - lhs[i];
     }
@@ -122,43 +125,6 @@ ConvexHull operator+(ConvexHull lhs, ConvexHull rhs) {
     return res;
 }
 
-template <class Info, class Result> struct SegmentTree {
-    int n;
-    std::vector<Info> info;
-    SegmentTree(int n = 0, const Info &v = {}) { init(n, v); }
-    template <class T> SegmentTree(const std::vector<T> &data) { init(data); }
-    void init(int n = 0, const Info &v = {}) { init(std::vector(n, v)); }
-    template <class T> void init(const std::vector<T> &data) {
-        n = data.size();
-        if (n == 0) {
-            return;
-        }
-        info.assign(4 << std::__lg(n), {});
-        auto build = [&](auto &&self, int p, int l, int r) -> void {
-            if (r - l == 1) {
-                info[p] = data[l];
-                return;
-            }
-            int m = (l + r) / 2;
-            self(self, 2 * p, l, m);
-            self(self, 2 * p + 1, m, r);
-            pull(p);
-        };
-        build(build, 1, 0, n);
-    }
-    void pull(int p) { info[p] = info[2 * p] + info[2 * p + 1]; }
-    Result rangeQuery(int p, int l, int r, int x, int y, i64 v) {
-        if (l >= y || r <= x) {
-            return {};
-        }
-        if (l >= x && r <= y) {
-            return info[p].query(v);
-        }
-        int m = (l + r) / 2;
-        return rangeQuery(2 * p, l, m, x, y, v) + rangeQuery(2 * p + 1, m, r, x, y, v);
-    }
-    Result rangeQuery(int l, int r, i64 v) { return rangeQuery(1, 0, n, l, r, v); }
-};
 struct Result {
     i64 sum, beg, end, ans;
     Result() : sum{}, beg{}, end{}, ans{} {}
@@ -168,24 +134,16 @@ Result operator+(const Result &lhs, const Result &rhs) {
     res.sum = lhs.sum + rhs.sum;
     res.beg = std::max(lhs.beg, lhs.sum + rhs.beg);
     res.end = std::max(rhs.end, lhs.end + rhs.sum);
-    res.ans = std::max({lhs.ans, rhs.ans, lhs.end + rhs.beg});
+    res.ans = std::max(lhs.ans, rhs.ans);
+    res.ans = std::max(res.ans, lhs.end + rhs.beg);
     return res;
 }
-i64 queryMax(const ConvexHull &p, i64 k) {
-    int lo = 0, hi = p.size() - 2;
-    while (lo < hi) {
-        int i = (lo + hi + 1) / 2;
-        if (-k * (p[i].x - p[i + 1].x) >= p[i].y - p[i + 1].y) {
-            lo = i;
-        } else {
-            hi = i - 1;
-        }
+i64 queryMax(ConvexHull &p, i64 k) {
+    int &i = p.cur;
+    while (i + 1 < p.size() && p[i + 1].x * k + p[i + 1].y >= p[i].x * k + p[i].y) {
+        i++;
     }
-    i64 res = 0;
-    for (int i = lo; i <= lo + 1; i++) {
-        res = std::max(res, p[i].x * k + p[i].y);
-    }
-    return res;
+    return p[i].x * k + p[i].y;
 }
 struct Info {
     Point sum;
@@ -205,18 +163,18 @@ Info operator+(const Info &lhs, const Info &rhs) {
     res.sum = lhs.sum + rhs.sum;
     res.beg = lhs.beg;
     for (auto p : rhs.beg) {
-        res.beg.push_back(lhs.sum + p);
+        res.beg.emplace_back(lhs.sum + p);
     }
     res.beg = getUpperHull(res.beg);
     res.end = rhs.end;
     for (auto p : lhs.end) {
-        res.end.push_back(p + rhs.sum);
+        res.end.emplace_back(p + rhs.sum);
     }
     res.end = getUpperHull(res.end);
     res.ans = lhs.ans;
     res.ans.insert(res.ans.end(), rhs.ans.begin(), rhs.ans.end());
     for (auto p : lhs.end + rhs.beg) {
-        res.ans.push_back(p);
+        res.ans.emplace_back(p);
     }
     res.ans = getUpperHull(res.ans);
     return res;
@@ -234,16 +192,9 @@ int main() {
         std::cin >> a;
     }
 
-    std::vector<Info> init(n);
-    for (int i = 0; i < n; i++) {
-        init[i].sum = Point(1, a[i]);
-        init[i].beg.push_back(init[i].sum);
-        init[i].end.push_back(init[i].sum);
-        init[i].ans.push_back(init[i].sum);
-    }
-    SegmentTree<Info, Result> seg(init);
-
     i64 sum = 0;
+    std::vector<std::pair<int, int>> itv;
+    std::vector<std::pair<i64, int>> que;
     while (q--) {
         std::string o;
         std::cin >> o;
@@ -256,8 +207,64 @@ int main() {
             int l, r;
             std::cin >> l >> r;
             l--;
-            std::cout << seg.rangeQuery(l, r, sum).ans << "\n";
+            itv.emplace_back(l, r);
+            que.emplace_back(sum, que.size());
         }
+    }
+    std::ranges::sort(que, std::greater());
+
+    std::vector<std::vector<int>> query(4 << std::__lg(n));
+    auto add = [&](int i) {
+        auto [x, y] = itv[que[i].second];
+        auto dfs = [&](auto &&self, int p, int l, int r) -> void {
+            if (l >= y || r <= x) {
+                return;
+            }
+            if (l >= x && r <= y) {
+                query[p].emplace_back(i);
+                return;
+            }
+            int m = (l + r) / 2;
+            self(self, 2 * p, l, m);
+            self(self, 2 * p + 1, m, r);
+        };
+        dfs(dfs, 1, 0, n);
+    };
+    for (int i = 0; i < que.size(); i++) {
+        add(i);
+    }
+
+    std::vector<Result> res(que.size());
+    auto work = [&](auto &&self, int p, int l, int r) -> Info {
+        if (r - l == 1) {
+            Info cur;
+            cur.sum = Point(1, a[l]);
+            cur.beg.emplace_back(cur.sum);
+            cur.beg.emplace_back();
+            cur.end.emplace_back(cur.sum);
+            cur.end.emplace_back();
+            cur.ans.emplace_back(cur.sum);
+            cur.ans.emplace_back();
+            for (auto j : query[p]) {
+                auto [s, i] = que[j];
+                res[i] = res[i] + cur.query(s);
+            }
+            return cur;
+        }
+        int m = (l + r) / 2;
+        auto lhs = self(self, 2 * p, l, m);
+        auto rhs = self(self, 2 * p + 1, m, r);
+        auto cur = lhs + rhs;
+        for (auto j : query[p]) {
+            auto [s, i] = que[j];
+            res[i] = res[i] + cur.query(s);
+        }
+        return cur;
+    };
+    work(work, 1, 0, n);
+
+    for (auto res : res) {
+        std::cout << res.ans << "\n";
     }
 
     return 0;
