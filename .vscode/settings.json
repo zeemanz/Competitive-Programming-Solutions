@@ -4,7 +4,7 @@
     "C_Cpp.default.compilerPath": "clang++",
     "C_Cpp.default.cppStandard": "c++20",
     "C_Cpp.clang_format_sortIncludes": true,
-    "C_Cpp.clang_format_style": "{ Language: Cpp, Standard: Auto, BasedOnStyle: LLVM, UseTab: Never, TabWidth: 4, IndentWidth: 4, IndentCaseLabels: true, NamespaceIndentation: All, BreakBeforeBraces: Attach, ColumnLimit: 120 }",
+    "C_Cpp.clang_format_style": "{ Language: Cpp, Standard: Auto, BasedOnStyle: LLVM, UseTab: Never, TabWidth: 4, IndentWidth: 4, IndentCaseLabels: true, NamespaceIndentation: All, BreakBeforeBraces: Attach, ColumnLimit: 120, AllowShortFunctionsOnASingleLine: Empty }",
     // Competitive Programming Helper
     "cph.general.defaultLanguage": "cpp",
     "cph.general.defaultLanguageTemplateFileLocation": "/Users/zhangzimo/Workspace/Competitive-Programming-Solutions/.cph/template.cpp",
