@@ -6,7 +6,9 @@ using u64 = unsigned long long;
 
 constexpr i64 inf = 1E18;
 
-template <class T> void chmax(T &a, T b) { a = std::max(a, b); }
+template <class T> void chmax(T &a, T b) {
+    a = std::max(a, b);
+}
 
 void solve() {
     int n;

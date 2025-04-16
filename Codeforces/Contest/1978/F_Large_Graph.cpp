@@ -7,7 +7,9 @@ using u64 = unsigned long long;
 struct DSU {
     std::vector<int> par;
     DSU() {}
-    DSU(int n) { init(n); }
+    DSU(int n) {
+        init(n);
+    }
     void init(int n) {
         par.resize(n);
         std::iota(par.begin(), par.end(), 0);
@@ -18,7 +20,9 @@ struct DSU {
         }
         return x;
     }
-    bool same(int x, int y) { return find(x) == find(y); }
+    bool same(int x, int y) {
+        return find(x) == find(y);
+    }
     bool merge(int x, int y) {
         x = find(x);
         y = find(y);

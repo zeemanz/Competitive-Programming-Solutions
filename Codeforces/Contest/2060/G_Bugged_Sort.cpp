@@ -25,9 +25,7 @@ int main() {
 
         std::vector<int> ord(n);
         std::iota(ord.begin(), ord.end(), 0);
-        std::ranges::sort(ord, [&](int i, int j) {
-            return std::min(a[i], b[i]) < std::min(a[j], b[j]);
-        });
+        std::ranges::sort(ord, [&](int i, int j) { return std::min(a[i], b[i]) < std::min(a[j], b[j]); });
 
         int dp[2][2]{{1, 0}, {1, 0}};
         for (int pa = 0, pb = 0; int i : ord) {

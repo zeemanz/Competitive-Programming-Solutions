@@ -55,9 +55,7 @@ int main() {
         };
         dfs(dfs, 0, -1);
 
-        auto f = [&](int n) {
-            return 1LL * n * (n - 1) / 2;
-        };
+        auto f = [&](int n) { return 1LL * n * (n - 1) / 2; };
 
         i64 ans = f(n);
         for (int u = 0; u < n; u++) {

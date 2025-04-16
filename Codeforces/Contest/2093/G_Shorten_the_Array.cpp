@@ -12,8 +12,12 @@ struct Trie {
         Node() : idx{-1}, next{} {}
     };
     std::vector<Node> t;
-    Trie() { init(); }
-    void init() { t.assign(1, {}); }
+    Trie() {
+        init();
+    }
+    void init() {
+        t.assign(1, {});
+    }
     int newNode() {
         t.emplace_back();
         return t.size() - 1;

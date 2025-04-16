@@ -2,7 +2,9 @@ struct Comb {
     int n;
     std::vector<Z> _fac, _invfac, _inv;
     Comb() : n{0}, _fac{1}, _invfac{1}, _inv{0} {}
-    Comb(int n) : Comb() { init(n); }
+    Comb(int n) : Comb() {
+        init(n);
+    }
     void init(int m) {
         if (m <= n) {
             return;

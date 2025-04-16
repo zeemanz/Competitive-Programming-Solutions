@@ -15,7 +15,9 @@ int sgn(geo_t x) {
 struct Point {
     geo_t x, y;
     Point(geo_t x = {}, geo_t y = {}) : x{x}, y{y} {}
-    Point operator-() { return Point(-x, -y); }
+    Point operator-() {
+        return Point(-x, -y);
+    }
     Point &operator+=(const Point &rhs) {
         x += rhs.x;
         y += rhs.y;
@@ -36,12 +38,24 @@ struct Point {
         y /= rhs;
         return *this;
     }
-    friend Point operator+(Point lhs, const Point &rhs) { return lhs += rhs; }
-    friend Point operator-(Point lhs, const Point &rhs) { return lhs -= rhs; }
-    friend Point operator*(Point lhs, const geo_t &rhs) { return lhs *= rhs; }
-    friend Point operator*(const geo_t &lhs, Point rhs) { return rhs *= lhs; }
-    friend Point operator/(Point lhs, const geo_t &rhs) { return lhs /= rhs; }
-    friend Point operator/(const geo_t &lhs, Point rhs) { return rhs /= lhs; }
+    friend Point operator+(Point lhs, const Point &rhs) {
+        return lhs += rhs;
+    }
+    friend Point operator-(Point lhs, const Point &rhs) {
+        return lhs -= rhs;
+    }
+    friend Point operator*(Point lhs, const geo_t &rhs) {
+        return lhs *= rhs;
+    }
+    friend Point operator*(const geo_t &lhs, Point rhs) {
+        return rhs *= lhs;
+    }
+    friend Point operator/(Point lhs, const geo_t &rhs) {
+        return lhs /= rhs;
+    }
+    friend Point operator/(const geo_t &lhs, Point rhs) {
+        return rhs /= lhs;
+    }
     friend bool operator<(const Point &lhs, const Point &rhs) {
         if (lhs.x == rhs.x) {
             return lhs.y < rhs.y;
@@ -49,23 +63,37 @@ struct Point {
             return lhs.x < rhs.x;
         }
     }
-    friend bool operator==(const Point &lhs, const Point &rhs) { return lhs.x == rhs.x && lhs.y == rhs.y; }
-    friend bool operator<=(const Point &lhs, const Point &rhs) { return lhs < rhs || lhs == rhs; }
-    friend std::istream &operator>>(std::istream &is, Point &rhs) { return is >> rhs.x >> rhs.y; }
+    friend bool operator==(const Point &lhs, const Point &rhs) {
+        return lhs.x == rhs.x && lhs.y == rhs.y;
+    }
+    friend bool operator<=(const Point &lhs, const Point &rhs) {
+        return lhs < rhs || lhs == rhs;
+    }
+    friend std::istream &operator>>(std::istream &is, Point &rhs) {
+        return is >> rhs.x >> rhs.y;
+    }
     friend std::ostream &operator<<(std::ostream &os, const Point &rhs) {
         return os << "(" << rhs.x << ", " << rhs.y << ")";
     }
 };
-geo_t dot(Point p, Point q) { return p.x * q.x + p.y * q.y; }
-geo_t cross(Point p, Point q) { return p.x * q.y - p.y * q.x; }
+geo_t dot(Point p, Point q) {
+    return p.x * q.x + p.y * q.y;
+}
+geo_t cross(Point p, Point q) {
+    return p.x * q.y - p.y * q.x;
+}
 struct Line {
     Point a, b;
     Line(Point a = {}, Point b = {}) : a{a}, b{b} {}
 };
-int toLeft(Point p, Line l) { return sgn(cross(l.b - l.a, p - l.a)); }
+int toLeft(Point p, Line l) {
+    return sgn(cross(l.b - l.a, p - l.a));
+}
 struct Polygon : std::vector<Point> {
     using std::vector<Point>::vector;
-    Point &operator[](size_t __n) { return std::vector<Point>::operator[](__n % size()); }
+    Point &operator[](size_t __n) {
+        return std::vector<Point>::operator[](__n % size());
+    }
     const Point &operator[](size_t __n) const {
         auto it = std::vector<Point>::begin();
         return std::vector<Point>::operator[](__n % size());

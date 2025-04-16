@@ -4,8 +4,7 @@ using u32 = unsigned int;
 using i64 = long long;
 using u64 = unsigned long long;
 
-template<class T>
-constexpr T power(T a, u64 n) {
+template <class T> constexpr T power(T a, u64 n) {
     T res{1};
     for (; n != 0; n /= 2, a *= a) {
         if (n % 2 == 1) {
@@ -15,23 +14,19 @@ constexpr T power(T a, u64 n) {
     return res;
 }
 
-template<u32 P>
-constexpr u32 mulMod(u32 a, u32 b) {
+template <u32 P> constexpr u32 mulMod(u32 a, u32 b) {
     return 1ULL * a * b % P;
 }
 
-template<u64 P>
-constexpr u64 mulMod(u64 a, u64 b) {
+template <u64 P> constexpr u64 mulMod(u64 a, u64 b) {
     u64 res = a * b - u64(1.0L * a * b / P - 0.5L) * P;
     return res % P;
 }
 
-template<class U, U P>
-struct ModBase {
+template <class U, U P> struct ModBase {
     U x;
     constexpr ModBase() : x{} {}
-    template<class T>
-    constexpr ModBase(T x) : x{norm(x % mod())} {}
+    template <class T> constexpr ModBase(T x) : x{norm(x % mod())} {}
     static constexpr U mod() {
         return P;
     }
@@ -94,16 +89,13 @@ struct ModBase {
     }
 };
 
-template<u32 P>
-using Mod32 = ModBase<u32, P>;
-template<u64 P>
-using Mod64 = ModBase<u64, P>;
+template <u32 P> using Mod32 = ModBase<u32, P>;
+template <u64 P> using Mod64 = ModBase<u64, P>;
 
 constexpr u32 P = 998244353;
 using Z = Mod32<P>;
 
-template<int V>
-constexpr Z inv = Z(V).inv();
+template <int V> constexpr Z inv = Z(V).inv();
 
 struct Comb {
     int n;

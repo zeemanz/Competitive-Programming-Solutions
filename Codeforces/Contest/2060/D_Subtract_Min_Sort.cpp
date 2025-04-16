@@ -22,7 +22,7 @@ int main() {
 
         for (int i = 0; i + 1 < n; i++) {
             int x = std::min(a[i], a[i + 1]);
-            a[i] -=  x;
+            a[i] -= x;
             a[i + 1] -= x;
         }
 

@@ -25,9 +25,7 @@ int main() {
 
         std::vector<int> ord(n);
         std::iota(ord.begin(), ord.end(), 0);
-        std::ranges::sort(ord, [&](int i, int j) {
-            return a[i][0] < a[j][0];
-        });
+        std::ranges::sort(ord, [&](int i, int j) { return a[i][0] < a[j][0]; });
 
         int p = -1;
         bool ok = true;
