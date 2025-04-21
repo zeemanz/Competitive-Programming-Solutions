@@ -20,7 +20,7 @@ template <u64 P> constexpr u64 mulMod(u64 a, u64 b) {
 template <class U, U P> struct ModBase {
     U x;
     constexpr ModBase() : x{0} {}
-    template <class T> constexpr ModBase(T x) : x{norm(x % mod())} {}
+    template <class T> constexpr ModBase(T x) : x{norm(x % T(mod()))} {}
     static constexpr U mod() {
         return P;
     }
