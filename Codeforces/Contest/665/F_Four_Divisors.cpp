@@ -64,11 +64,10 @@ template <class T> struct Min25 {
     std::vector<T> coef;
     std::vector<std::vector<T>> sum, ini, val;
     Min25() : n{0}, sqrt{0} {}
-    Min25(i64 n, const std::vector<T> &coef, const std::vector<Func> &func, int lim = std::numeric_limits<u32>::max()) {
+    Min25(i64 n, const std::vector<T> &coef, const std::vector<Func> &func, u32 lim = -1) {
         init(n, coef, func, lim);
     }
-    void init(i64 m, const std::vector<T> &coef, const std::vector<Func> &func,
-              int lim = std::numeric_limits<u32>::max()) {
+    void init(i64 m, const std::vector<T> &coef, const std::vector<Func> &func, u32 lim = -1) {
         n = m;
         sqrt = std::sqrt(n);
         pcnt = sieve.count(sqrt);
@@ -106,7 +105,7 @@ template <class T> struct Min25 {
         val.assign(pcnt, {});
         for (int i = 0; i < pcnt; i++) {
             auto b = sieve.prime(i);
-            val[i].reserve(int(std::floor(std::log(n) / std::log(b))) + 1);
+            val[i].reserve(std::floor(std::log(n) / std::log(b)) + 1);
             val[i].emplace_back(0);
             for (i64 e = 1, p = b, c = 0; e <= lim && p <= n; e++, p *= b, c = 1) {
                 val[i].emplace_back(0);

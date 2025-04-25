@@ -13,7 +13,7 @@ struct Sieve {
         _lpf.resize(n + 1);
         for (int i = 2; i <= n; i++) {
             if (_lpf[i] == 0) {
-                _prime.push_back(i);
+                _prime.emplace_back(i);
                 _lpf[i] = i;
             }
             for (auto p : _prime) {
@@ -48,4 +48,4 @@ struct Sieve {
         }
         return std::upper_bound(_prime.begin(), _prime.end(), m) - _prime.begin();
     }
-};
+} sieve(100000);
