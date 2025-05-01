@@ -15,81 +15,28 @@ int main() {
         int n;
         std::cin >> n;
 
-        std::vector<int> a(n);
-        for (auto &a : a) {
-            std::cin >> a;
-        }
-
-        auto v = a;
-        std::sort(v.begin(), v.end());
-        v.erase(std::unique(v.begin(), v.end()), v.end());
-        for (auto &a : a) {
-            a = std::lower_bound(v.begin(), v.end(), a) - v.begin();
-        }
-
-        std::vector<std::vector<std::pair<int, int>>> pos(v.size());
+        std::vector<int> a;
         for (int i = 0; i < n; i++) {
-            if (pos[a[i]].empty()) {
-                pos[a[i]].emplace_back(i, i + 1);
-            } else {
-                if (pos[a[i]].back().second == i) {
-                    pos[a[i]].back().second = i + 1;
-                } else {
-                    pos[a[i]].emplace_back(i, i + 1);
-                }
+            int x;
+            std::cin >> x;
+
+            if (!a.empty() && a.back() == x) {
+                a.pop_back();
             }
+            a.push_back(x);
         }
 
         int ans = 0;
-        std::set<std::pair<int, int>> seg;
-        for (int x = v.size() - 1; x >= 0; x--) {
-            for (auto [l, r] : pos[x]) {
-                auto lit = seg.upper_bound({l, r});
-                auto rit = seg.upper_bound({l, r});
-                if (lit != seg.begin() && rit != seg.end()) {
-                    lit = std::prev(lit);
-                    auto [ll, lr] = *lit;
-                    auto [rl, rr] = *rit;
-                    if (lr == l && rl == r) {
-                        seg.erase(lit);
-                        seg.erase(rit);
-                        seg.emplace(ll, rr);
-                    } else if (lr == l) {
-                        seg.erase(lit);
-                        seg.emplace(ll, r);
-                    } else if (rl == r) {
-                        seg.erase(rit);
-                        seg.emplace(l, rr);
-                    } else {
-                        ans++;
-                        seg.emplace(l, r);
-                    }
-                } else if (lit != seg.begin()) {
-                    lit = std::prev(lit);
-                    auto [ll, lr] = *lit;
-                    if (lr == l) {
-                        seg.erase(lit);
-                        seg.emplace(ll, r);
-                    } else {
-                        ans++;
-                        seg.emplace(l, r);
-                    }
-                } else if (rit != seg.end()) {
-                    auto [rl, rr] = *rit;
-                    if (rl == r) {
-                        seg.erase(rit);
-                        seg.emplace(l, rr);
-                    } else {
-                        ans++;
-                        seg.emplace(l, r);
-                    }
-                } else {
-                    ans++;
-                    seg.emplace(l, r);
-                }
+        for (int i = 0; i < a.size(); i++) {
+            int v = 1;
+            if (i - 1 >= 0) {
+                v &= a[i] > a[i - 1];
             }
+            if (i + 1 < a.size()) {
+                v &= a[i] > a[i + 1];
+            }
+            ans += v;
         }
-
         std::cout << ans << "\n";
     }
 
