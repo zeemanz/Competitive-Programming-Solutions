@@ -13,24 +13,20 @@ u64 power(u64 a, u64 b, u64 m) {
     return res;
 }
 
-bool isPrime(u64 n) {
+bool isPrime(i64 n) {
     if (n < 4) {
         return n == 2 || n == 3;
     }
     if (n % 2 == 0) {
         return false;
     }
-    int s = 0;
-    u64 d = n - 1;
-    while (d % 2 == 0) {
-        d /= 2;
-        s++;
-    }
-    for (auto a : {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}) {
+    int s = std::countr_zero(u64(n - 1));
+    i64 d = (n - 1) >> s;
+    for (auto a : {2, 3, 5, 7, 11, 13, 17, 19, 23}) {
         if (a == n) {
             return true;
         }
-        u64 x = power(a, d, n);
+        i64 x = power(a, d, n);
         if (x == 1 || x == n - 1) {
             continue;
         }
