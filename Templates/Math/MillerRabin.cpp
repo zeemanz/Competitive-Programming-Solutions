@@ -1,6 +1,5 @@
 u64 mul(u64 a, u64 b, u64 m) {
-    u64 res = a * b - u64(1.0L * a * b / m - 0.5L) * m;
-    return res % m;
+    return static_cast<__uint128>(a) * b % m;
 }
 
 u64 power(u64 a, u64 b, u64 m) {

@@ -9,12 +9,11 @@ template <class T> constexpr T power(T a, u64 n) {
 }
 
 template <u32 P> constexpr u32 mulMod(u32 a, u32 b) {
-    return 1ULL * a * b % P;
+    return static_cast<u64>(a) * b % P;
 }
 
 template <u64 P> constexpr u64 mulMod(u64 a, u64 b) {
-    u64 res = a * b - u64(1.0L * a * b / P - 0.5L) * P;
-    return res % P;
+    return static_cast<__uint128>(a) * b % P;
 }
 
 template <class U, U P> struct ModBase {
