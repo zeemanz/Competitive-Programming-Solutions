@@ -13,7 +13,7 @@ template <u32 P> constexpr u32 mulMod(u32 a, u32 b) {
 }
 
 template <u64 P> constexpr u64 mulMod(u64 a, u64 b) {
-    return static_cast<__uint128>(a) * b % P;
+    return static_cast<u128>(a) * b % P;
 }
 
 template <class U, U P> struct ModBase {

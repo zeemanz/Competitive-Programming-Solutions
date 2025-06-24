@@ -47,4 +47,7 @@ struct Comb {
             return fac(n) * invfac(m) * invfac(n - m);
         }
     }
+    Z catalan(int n) {
+        return binom(2 * n, n) - binom(2 * n, n - 1);
+    }
 } comb;

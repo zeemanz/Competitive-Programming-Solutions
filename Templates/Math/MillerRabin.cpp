@@ -1,5 +1,5 @@
 u64 mul(u64 a, u64 b, u64 m) {
-    return static_cast<__uint128>(a) * b % m;
+    return static_cast<u128>(a) * b % m;
 }
 
 u64 power(u64 a, u64 b, u64 m) {
