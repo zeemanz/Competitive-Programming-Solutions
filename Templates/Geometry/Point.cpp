@@ -1,17 +1,11 @@
-const f64 pi = std::acos(-1.0), eps = 1E-9;
+using geo_t = long long;
+using f64 = long double;
 
-f64 rad2deg(f64 rad) {
-    return 180 / pi * rad;
-}
-f64 deg2rad(f64 deg) {
-    return pi / 180 * deg;
-}
+const f64 pi = acosl(-1), eps = 1E-9;
 
-using geo_t = i64;
-
-int sgn(geo_t x) {
-    if (x == 0) {
-        return x;
+template <class T> int sgn(T x) {
+    if (std::abs(x) < eps) {
+        return 0;
     } else {
         return x < 0 ? -1 : 1;
     }
@@ -75,7 +69,7 @@ struct Point {
         return is >> rhs.x >> rhs.y;
     }
     friend std::ostream &operator<<(std::ostream &os, const Point &rhs) {
-        return os << rhs.x << " " << rhs.y;
+        return os << "(" << rhs.x << ", " << rhs.y << ")";
     }
 };
 
@@ -111,13 +105,20 @@ geo_t square(Point p) {
     return dot(p, p);
 }
 f64 length(Point p) {
-    return std::sqrt(square(p));
+    return sqrtl(square(p));
 }
 f64 distance(Point p, Point q) {
-    return std::sqrt(square(q - p));
+    return sqrtl(square(q - p));
+}
+f64 rad2deg(f64 rad) {
+    return 180 / pi * rad;
+}
+f64 deg2rad(f64 deg) {
+    return pi / 180 * deg;
 }
 f64 radian(Point p, Point q) {
-    return std::acos(dot(p, q) / length(p) / length(q));
+    f64 rad = atan2l(q.y, q.x) - atan2(p.y, p.x);
+    return rad;
 }
 f64 degree(Point p, Point q) {
     return rad2deg(radian(p, q));
@@ -134,7 +135,7 @@ Point rotate(Point p, f64 s, f64 c, Point o = {}) {
     return o + Point(v.x * c - v.y * s, v.x * s + v.y * c);
 }
 Point rotate(Point p, f64 rad, Point o = {}) {
-    f64 s = std::sin(rad), c = std::cos(rad);
+    f64 s = sinl(rad), c = cosl(rad);
     return rotate(p, s, c, o);
 }
 Point format(Point p) {
