@@ -8,11 +8,11 @@
     "C_Cpp.clang_format_style": "{ Language: Cpp, Standard: Auto, BasedOnStyle: LLVM, UseTab: Never, TabWidth: 4, IndentWidth: 4, IndentCaseLabels: true, NamespaceIndentation: All, BreakBeforeBraces: Attach, ColumnLimit: 120, AllowShortFunctionsOnASingleLine: Empty }",
     // Competitive Programming Helper
     "cph.general.defaultLanguage": "cpp",
-    "cph.general.defaultLanguageTemplateFileLocation": "/Users/zhangzimo/Workspace/Competitive-Programming-Solutions/.cph/template.cpp",
+    "cph.general.defaultLanguageTemplateFileLocation": "/Users/Zimo/Workspace/Competitive-Programming-Solutions/.cph/template.cpp",
     "cph.general.ignoreSTDERROR": true,
     "cph.general.retainWebviewContext": true,
     "cph.general.timeOut": 10000,
-    "cph.language.cpp.Args": "-O2 -Wall -Wextra -Wconversion -std=c++20",
+    "cph.language.cpp.Args": "-O2 -Wall -Wextra -Wconversion -std=c++20 -fsanitize=address",
     "cph.language.cpp.Command": "clang++",
     "cph.language.cpp.SubmissionCompiler": "GNU G++20 13.2 (64 bit, winlibs)",
 }
